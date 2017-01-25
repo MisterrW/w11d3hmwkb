@@ -1,4 +1,5 @@
 var albums = null;
+
 var makeRequest = function(url, callback){
   var request = new XMLHttpRequest();
   request.open('GET', url);
@@ -9,11 +10,7 @@ var makeRequest = function(url, callback){
 var checkJson = function(){
   if (this.status !== 200) return;
   var json = JSON.parse(this.responseText);
-  // console.log(json);
   albums = json.albums.items;
-  // for (album of albums){
-  //   console.log(album.name);
-  // }
   writeAllAlbums();
 }
 
@@ -25,20 +22,18 @@ var writeAlbums = function(list){
   var albumDiv = document.querySelector('#albums');
   albumDiv.innerText = "";
   for (album of list){
-    // console.log(album.name);
     var albumName = document.createElement('p');
     albumName.innerText = album.name;
     albumDiv.appendChild(albumName);
   }
 }
 
-
 var searchAlbums = function(){
   var searchString = document.querySelector('#search-query').value;
   console.log(searchString);
   var searched = [];
   for(album of albums){
-    console.log(album.name, searchString);
+    // console.log(album.name, searchString);
     if(album.name.toLowerCase().includes(searchString.toLowerCase())){
       searched.push(album);
     }
