@@ -9,26 +9,50 @@ var makeRequest = function(url, callback){
 var checkJson = function(){
   if (this.status !== 200) return;
   var json = JSON.parse(this.responseText);
+  // console.log(json);
   albums = json.albums.items;
-  for (album of albums){
-    console.log(album.name);
-  }
-  writeAlbums();
+  // for (album of albums){
+  //   console.log(album.name);
+  // }
+  writeAllAlbums();
 }
 
-var writeAlbums = function(){
+writeAllAlbums = function(){
+  writeAlbums(albums);
+}
+
+var writeAlbums = function(list){
   var albumDiv = document.querySelector('#albums');
-  for (album of albums){
-    console.log(album.name);
+  albumDiv.innerText = "";
+  for (album of list){
+    // console.log(album.name);
     var albumName = document.createElement('p');
     albumName.innerText = album.name;
     albumDiv.appendChild(albumName);
-  } 
+  }
+}
+
+
+var searchAlbums = function(){
+  var searchString = document.querySelector('#search-query').value;
+  console.log(searchString);
+  var searched = [];
+  for(album of albums){
+    console.log(album.name, searchString);
+    if(album.name.toLowerCase().includes(searchString.toLowerCase())){
+      searched.push(album);
+    }
+  }
+  console.log(searched);
+  writeAlbums(searched);
 }
 
 var app = function(){
   var url = "https://api.spotify.com/v1/search?q=christmas&type=album";
   makeRequest(url, checkJson);
+
+  var searchButton = document.querySelector('#go-search');
+  searchButton.onclick = searchAlbums;
 }
 
 window.onload = app;
